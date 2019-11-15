@@ -34,6 +34,20 @@ RSpec.describe DockingStation do
     end
   end
 
+  context "capacity" do
+    let(:default_docking_station) { DockingStation.new }
+    let(:custom_docking_station) { DockingStation.new(35) }
+
+    it "should have a maximum capacity" do
+      expect(subject).to respond_to(:capacity)
+    end
+
+    it "should have a default capacity of 20" do
+      expect(default_docking_station.capacity).to be 20
+      expect(custom_docking_station.capacity).to be 35
+    end
+  end
+
   context "when docking station is empty" do
     let(:empty_docking_station) { DockingStation.new }
     it "should deny customer a bike" do
