@@ -49,4 +49,5 @@ RSpec.describe DockingStation do
       expect { full_docking_station.dock_bike(test_bike) }.to raise_error Errors::AtCapacity
     end
   end
+  
 end

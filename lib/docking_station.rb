@@ -9,7 +9,7 @@ class DockingStation
   end
   
   def release_bike
-    if @bike_rack.length > 0
+    if !empty?
       Bike.new 
     else
       raise Errors::NoBikesLeft
@@ -17,10 +17,20 @@ class DockingStation
   end
 
   def dock_bike(bike)
-    if @bike_rack.length < 20
+    if !full?
       @bike_rack.push(Bike.new)
     else
       raise Errors::AtCapacity
     end
+  end
+
+  private
+  
+  def full?
+    @bike_rack.length == 20
+  end
+
+  def empty?
+    @bike_rack.length == 0
   end
 end
