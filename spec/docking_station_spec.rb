@@ -8,20 +8,27 @@ RSpec.describe DockingStation do
     test_docking_station.dock_bike(test_bike)
   end
 
-  it "should be able to release a bike" do 
-    expect(subject).to respond_to(:release_bike)
-  end
+  context "when retrieving bikes" do
+    it "should be able to release an actual bike" do
+      expect(subject).to respond_to(:release_bike)
+      expect(test_docking_station.release_bike).to be_an_instance_of(Bike)
+      expect(test_docking_station.release_bike).to be_working
+    end
 
-  it "should be able to release a bike" do
-    expect(test_docking_station.release_bike).to be_an_instance_of(Bike)
-    expect(test_docking_station.release_bike).to be_working
-    
-  end
+    it "should be able to store bikes" do
+      expect(subject).to respond_to(:dock_bike).with(1).arguments
+    end
 
-  it "should be able to store bikes" do
-    expect(subject).to respond_to(:dock_bike).with(1).arguments
-  end
+    it "should release broken bikes" do
+      ancient_docking_station = DockingStation.new
+      broken_bike = Bike.new
+      broken_bike.working = false
+      ancient_docking_station.dock_bike(broken_bike)
 
+      expect { ancient_docking_station.release_bike }.to raise_error Errors::NoWorkingBikes
+    end
+  end
+  
   it "should have a bike rack" do
     expect(subject).to respond_to(:bike_rack)
     expect(subject.bike_rack).to be_an_instance_of(Array)
@@ -30,7 +37,9 @@ RSpec.describe DockingStation do
   context "when storing bikes" do
     it "should store actual bikes returned by customers" do
       expect { test_docking_station.dock_bike(test_bike) }.to change { test_docking_station.bike_rack.length }.by 1
+      expect { test_docking_station.dock_bike("Bike") }.to raise_error Errors::NotABike
       expect(test_docking_station.bike_rack).to all be_an_instance_of Bike
+      expect(test_docking_station.bike_rack).to include(test_bike)
     end
   end
 
@@ -63,5 +72,4 @@ RSpec.describe DockingStation do
       expect { full_docking_station.dock_bike(test_bike) }.to raise_error Errors::AtCapacity
     end
   end
-  
 end

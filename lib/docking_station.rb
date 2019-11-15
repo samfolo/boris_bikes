@@ -12,19 +12,17 @@ class DockingStation
   end
   
   def release_bike
-    if !empty?
-      Bike.new 
-    else
-      raise Errors::NoBikesLeft
-    end
+    raise Errors::NoBikesLeft if empty?
+    raise Errors::NoWorkingBikes if @bike_rack.all? { |bike| bike.working? == false }
+    Bike.new 
   end
 
   def dock_bike(bike)
-    if !full?
-      @bike_rack.push(Bike.new)
-    else
-      raise Errors::AtCapacity
-    end
+    raise Errors::NotABike if bike.class != Bike
+    raise Errors::AtCapacity if full?
+    bike.health -= 1
+    bike.working = false if bike.health < 5
+    @bike_rack.push(bike)
   end
 
   private
