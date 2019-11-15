@@ -4,6 +4,8 @@ require_relative 'errors'
 class DockingStation
   attr_reader :bike_rack
   
+  DEFAULT_CAPACITY = 20
+
   def initialize
     @bike_rack = []
   end
@@ -25,9 +27,9 @@ class DockingStation
   end
 
   private
-  
+
   def full?
-    @bike_rack.length == 20
+    @bike_rack.length == DEFAULT_CAPACITY
   end
 
   def empty?

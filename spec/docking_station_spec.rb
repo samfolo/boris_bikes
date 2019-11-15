@@ -45,7 +45,7 @@ RSpec.describe DockingStation do
     let(:full_docking_station) { DockingStation.new }
 
     it "should not allow users to dock bikes" do
-      20.times { full_docking_station.dock_bike(test_bike) }
+      DockingStation::DEFAULT_CAPACITY.times { full_docking_station.dock_bike(test_bike) }
       expect { full_docking_station.dock_bike(test_bike) }.to raise_error Errors::AtCapacity
     end
   end
