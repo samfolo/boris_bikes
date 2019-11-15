@@ -17,6 +17,10 @@ class DockingStation
   end
 
   def dock_bike(bike)
-    @bike_rack.push(Bike.new)
+    if @bike_rack.length < 20
+      @bike_rack.push(Bike.new)
+    else
+      raise Errors::AtCapacity
+    end
   end
 end

@@ -36,8 +36,17 @@ RSpec.describe DockingStation do
 
   context "when docking station is empty" do
     let(:empty_docking_station) { DockingStation.new }
-    it "should deny customer a bike when there are none left" do
+    it "should deny customer a bike" do
       expect { empty_docking_station.release_bike }.to raise_error Errors::NoBikesLeft
+    end
+  end
+
+  context "when docking station is full" do
+    let(:full_docking_station) { DockingStation.new }
+
+    it "should not allow users to dock bikes" do
+      20.times { full_docking_station.dock_bike(test_bike) }
+      expect { full_docking_station.dock_bike(test_bike) }.to raise_error Errors::AtCapacity
     end
   end
 end
